@@ -658,9 +658,9 @@ function hidePopup() {
  * Add a new device;
  */
 function addDevice () {
-    var deviceIdValue = document.getElementsByName('deviceId')[0].value;;
-    var xCordValue = document.getElementsByName('xCord')[0].value;;
-    var yCordValue = document.getElementsByName('yCord')[0].value;;
+    var deviceIdValue = document.getElementsByName('deviceId')[0].value;
+    var xCordValue = document.getElementsByName('xCord')[0].value;
+    var yCordValue = document.getElementsByName('yCord')[0].value;
     var floorIdValue = $("#image").attr("floorId");
     var buildingIdValue = $("#image").attr("buildingId");
     var deviceType = $("#deviceType").val();

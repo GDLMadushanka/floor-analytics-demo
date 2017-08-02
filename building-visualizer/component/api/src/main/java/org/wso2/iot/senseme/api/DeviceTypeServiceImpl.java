@@ -172,11 +172,9 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
                     return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).build();
                 }
 
-                if (floorId == null || buildingId == null) {
-                    log.error("Building ID and Floor ID not found.");
-                    return Response.status(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode()).build();
+                if (floorId != null && buildingId != null) {
+                    addDeviceToGroups(buildingId, floorId, deviceIdentifierList);
                 }
-                addDeviceToGroups(buildingId, floorId, deviceIdentifierList);
                 return Response.status(Response.Status.OK).build();
             } catch (DeviceManagementException e) {
                 log.error(e);
