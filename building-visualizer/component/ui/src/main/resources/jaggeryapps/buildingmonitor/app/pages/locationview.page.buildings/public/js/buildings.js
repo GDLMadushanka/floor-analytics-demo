@@ -14,7 +14,6 @@ var numOfFloors;
 var isLive = true;
 var isPause = false;
 
-
 var tempGraph={graph:{}};
 var motionGraph={graph:{}};
 var humidityGraph={graph:{}};
@@ -60,9 +59,9 @@ function displyaData(floorId,data) {
     var light;
     var motion;
     if(data.light<500){
-        light = "ON";
+        light = "OFF";
     }else if (data.light>500){
-        light="OFF";
+        light="ON";
     }
 
     if (data.motion>0.5){

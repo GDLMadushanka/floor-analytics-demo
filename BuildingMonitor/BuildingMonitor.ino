@@ -318,8 +318,7 @@ void loop() {
       int airQuality = 0;//digitalRead(GAS);
       int light = 1024 - analogRead(LDR_PIN);
 
-      snprintf (msg, 150, "{\"event\":{\"payloadData\":{\"deviceId\":\"%s\", \"temperature\":%d.0 , \"motion\":%ld.0, \"humidity\":%d.0  , \"airQuality\":%ld.0, \"light\":%ld.0}}}"
-                , device_id, (int)temperature, isMoving, (int)humidity, airQuality, light);
+      snprintf (msg, 150, "{\"event\":{\"payloadData\":{\"deviceId\":\"%s\",\"temperature\":%d.0,\"motion\":%ld.0,\"humidity\":%d.0,\"airQuality\":%ld.0,\"light\":%ld.0}}}", device_id, (int)temperature, isMoving, (int)humidity, airQuality, light);
 
       client.publish(publishTopic, msg);
       Serial.println(msg);
