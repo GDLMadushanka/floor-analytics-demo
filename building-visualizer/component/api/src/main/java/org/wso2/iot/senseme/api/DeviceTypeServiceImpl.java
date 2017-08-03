@@ -29,7 +29,11 @@ import org.wso2.carbon.apimgt.application.extension.dto.ApiApplicationKey;
 import org.wso2.carbon.apimgt.application.extension.exception.APIManagerException;
 import org.wso2.carbon.base.MultitenantConstants;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.*;
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.DeviceNotFoundException;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.authorization.DeviceAccessAuthorizationException;
 import org.wso2.carbon.device.mgt.common.group.mgt.DeviceGroup;
 import org.wso2.carbon.device.mgt.common.group.mgt.GroupManagementException;
@@ -46,9 +50,19 @@ import org.wso2.iot.senseme.api.dto.TokenInfo;
 import org.wso2.iot.senseme.api.exception.DeviceTypeException;
 import org.wso2.iot.senseme.api.util.APIUtil;
 
+<<<<<<< HEAD
 import javax.servlet.http.HttpServletResponse;
 
 import javax.ws.rs.core.Context;
+=======
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+>>>>>>> 9adf9977650dfb15d509325f257a1d3e69a619e2
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -196,6 +210,8 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
 
                 if (floorId != null && buildingId != null) {
                     addDeviceToGroups(buildingId, floorId, deviceIdentifierList);
+                } else {
+                    addDeviceToDefaultGroup(deviceIdentifierList);
                 }
                 return Response.status(Response.Status.OK).build();
             } catch (DeviceManagementException e) {
@@ -435,6 +451,7 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
         }
     }
 
+<<<<<<< HEAD
 
 
     @Path("/{deviceId}/test")
@@ -477,4 +494,34 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
         }
     }
 
+=======
+    /**
+     * Add devices to default group which the particular device is in
+     *
+     * @param deviceIdentifiers : List of device ids to be added to the device group.
+     * @throws DeviceTypeException Device type exception
+     */
+    private void addDeviceToDefaultGroup(List<DeviceIdentifier> deviceIdentifiers)
+            throws DeviceTypeException {
+        GroupManagementProviderService groupManagementProviderService = APIUtil.getGroupManagementProviderService();
+
+        try {
+            String floorGroupName = String.format(DeviceTypeConstants.FLOOR_GROUP_NAME, 0, 0);
+            if (groupManagementProviderService.getGroup(floorGroupName) == null) {
+                String floorRole = String.format(DeviceTypeConstants.FLOOR_ROLE, 0, 0);
+                APIUtil.addRolesForBuildingsAndFloors(floorRole);
+                APIUtil.createAndAddGroups(floorGroupName, floorRole,
+                                           "Group for locations");
+            }
+            DeviceGroup floorDeviceGroup = groupManagementProviderService.getGroup(floorGroupName);
+            groupManagementProviderService.addDevices(floorDeviceGroup.getGroupId(), deviceIdentifiers);
+        } catch (GroupManagementException e) {
+            throw new DeviceTypeException("Cannot add the device to the default ", e);
+        } catch (DeviceNotFoundException e) {
+            throw new DeviceTypeException("Device " + deviceIdentifiers.get(0).getId() + " cannot be found.", e);
+        } catch (UserStoreException e) {
+            throw new DeviceTypeException("Cannot add user role for building.", e);
+        }
+    }
+>>>>>>> 9adf9977650dfb15d509325f257a1d3e69a619e2
 }
