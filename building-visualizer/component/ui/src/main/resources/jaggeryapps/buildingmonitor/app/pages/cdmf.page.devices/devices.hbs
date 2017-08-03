@@ -33,41 +33,6 @@
     </li>
 {{/zone}}
 
-{{#zone "navbarActions"}}
-    {{#if group}}
-        <li>
-            <a href="{{@app.context}}/devices" class="cu-btn">
-            <span class="icon fw-stack">
-                <i class="fw fw-add fw-stack-1x"></i>
-                <i class="fw fw-circle-outline fw-stack-2x"></i>
-            </span>
-                Assign from My Devices
-            </a>
-        </li>
-        <!--<li>
-            <a href="{{@app.context}}/group/{{group.id}}/analytics" class="cu-btn">
-            <span class="icon fw-stack">
-                <i class="fw fw-statistics fw-stack-1x"></i>
-                <i class="fw fw-circle-outline fw-stack-2x"></i>
-            </span>
-                View Analytics
-            </a>
-        </li>-->
-    {{else}}
-        {{#if permissions.enroll}}
-            <li>
-                <a href="{{@app.context}}/device/enroll" class="cu-btn">
-            <span class="icon fw-stack">
-                <i class="fw fw-add fw-stack-1x"></i>
-                <i class="fw fw-circle-outline fw-stack-2x"></i>
-            </span>
-                    Enroll Device
-                </a>
-            </li>
-        {{/if}}
-    {{/if}}
-{{/zone}}
-
 {{#zone "content"}}
     {{#if group}}
         <h1 class="page-sub-title">
