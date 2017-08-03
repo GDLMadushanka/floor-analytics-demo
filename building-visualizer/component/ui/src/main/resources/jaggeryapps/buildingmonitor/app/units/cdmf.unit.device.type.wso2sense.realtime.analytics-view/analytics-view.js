@@ -41,7 +41,7 @@ function onRequest(context) {
 		token = tokenPair.accessToken;
 
 	}
-
+new Log().info(device);
     websocketEndpointForStream1 = websocketEndpoint + "/secured-websocket/org.wso2.iot.devices.light/1.0.0?deviceId=" + device.deviceIdentifier + "&deviceType=" + device.type + "&websocketToken=" + token;
     websocketEndpointForStream2 = websocketEndpoint + "/secured-websocket/org.wso2.iot.devices.humidity/1.0.0?deviceId=" + device.deviceIdentifier + "&deviceType=" + device.type + "&websocketToken=" + token;
     websocketEndpointForStream3 = websocketEndpoint + "/secured-websocket/org.wso2.iot.devices.motion/1.0.0?deviceId=" + device.deviceIdentifier + "&deviceType=" + device.type + "&websocketToken=" + token;
