@@ -50,11 +50,11 @@ import org.wso2.iot.senseme.api.dto.TokenInfo;
 import org.wso2.iot.senseme.api.exception.DeviceTypeException;
 import org.wso2.iot.senseme.api.util.APIUtil;
 
-<<<<<<< HEAD
+
 import javax.servlet.http.HttpServletResponse;
 
 import javax.ws.rs.core.Context;
-=======
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -62,7 +62,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
->>>>>>> 9adf9977650dfb15d509325f257a1d3e69a619e2
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -451,7 +451,7 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
         }
     }
 
-<<<<<<< HEAD
+
 
 
     @Path("/{deviceId}/test")
@@ -494,7 +494,7 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
         }
     }
 
-=======
+
     /**
      * Add devices to default group which the particular device is in
      *
@@ -523,5 +523,5 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
             throw new DeviceTypeException("Cannot add user role for building.", e);
         }
     }
->>>>>>> 9adf9977650dfb15d509325f257a1d3e69a619e2
+
 }
