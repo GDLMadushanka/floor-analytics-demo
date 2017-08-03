@@ -82,10 +82,10 @@ $(window).load(function () {
         , graphForSensorType2);
 });
 
-$(window).unload(function () {
+window.onbeforeunload = function() {
     disconnect(wsConnection1);
     disconnect(wsConnection2);
-});
+};
 
 //websocket connection
 function connect(wsConnection, target, chartData, graph) {
