@@ -50,6 +50,11 @@ import org.wso2.iot.senseme.api.dto.TokenInfo;
 import org.wso2.iot.senseme.api.exception.DeviceTypeException;
 import org.wso2.iot.senseme.api.util.APIUtil;
 
+
+import javax.servlet.http.HttpServletResponse;
+
+import javax.ws.rs.core.Context;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -57,11 +62,32 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
+import org.wso2.carbon.device.mgt.common.InvalidDeviceException;
+
+import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
+import org.wso2.carbon.device.mgt.common.operation.mgt.OperationManagementException;
+import org.wso2.carbon.device.mgt.core.operation.mgt.CommandOperation;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import java.util.Properties;
 
 /**
  * This is the API which is used to control and manage device type functionality
@@ -200,6 +226,8 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
             return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
         }
     }
+
+
 
     /**
      * To download device type agent source code as zip file
@@ -423,6 +451,50 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
         }
     }
 
+
+
+
+    @Path("/{deviceId}/test")
+    @POST
+    public Response test(@PathParam("deviceId") String deviceId,
+                         @Context HttpServletResponse response) {
+        try {
+            if (!APIUtil.getDeviceAccessAuthorizationService().isUserAuthorized(new DeviceIdentifier(deviceId,
+                    DeviceTypeConstants.DEVICE_TYPE))) {
+                return Response.status(Response.Status.UNAUTHORIZED.getStatusCode()).build();
+            }
+            String publishTopic = APIUtil.getAuthenticatedUserTenantDomain()
+                    + "/" + DeviceTypeConstants.DEVICE_TYPE + "/" + deviceId + "/command";
+            Operation commandOp = new CommandOperation();
+            commandOp.setCode("test");
+            commandOp.setType(Operation.Type.COMMAND);
+            commandOp.setEnabled(true);
+            commandOp.setPayLoad("");
+
+            Properties props = new Properties();
+            props.setProperty("mqtt.adapter.topic", publishTopic);
+            commandOp.setProperties(props);
+
+            List<DeviceIdentifier> deviceIdentifiers = new ArrayList<>();
+            deviceIdentifiers.add(new DeviceIdentifier(deviceId, DeviceTypeConstants.DEVICE_TYPE));
+            APIUtil.getDeviceManagementService().addOperation(DeviceTypeConstants.DEVICE_TYPE, commandOp,
+                    deviceIdentifiers);
+            return Response.ok().build();
+        } catch (DeviceAccessAuthorizationException e) {
+            log.error(e.getErrorMessage(), e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (OperationManagementException e) {
+            String msg = "Error occurred while executing command operation upon ringing the buzzer";
+            log.error(msg, e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (InvalidDeviceException e) {
+            String msg = "Error occurred while executing command operation to send keywords";
+            log.error(msg, e);
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+
     /**
      * Add devices to default group which the particular device is in
      *
@@ -451,4 +523,5 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
             throw new DeviceTypeException("Cannot add user role for building.", e);
         }
     }
+
 }
