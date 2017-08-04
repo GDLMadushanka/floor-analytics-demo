@@ -94,12 +94,12 @@ $(window).load(function () {
         , graphForSensorType4);
 });
 
-$(window).unload(function () {
+window.onbeforeunload = function() {
     disconnect(wsConnection1);
     disconnect(wsConnection2);
     disconnect(wsConnection3);
     disconnect(wsConnection4);
-});
+};
 
 //websocket connection
 function connect(wsConnection, target, chartData, graph) {
